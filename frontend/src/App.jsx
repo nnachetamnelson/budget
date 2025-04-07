@@ -24,8 +24,8 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
       <Route path="/dashboard" element={<ProtectedRoute component={Home} />} />
-          <Route path="/report" element={<ProtectedRoute component={CategoryReport} />} />
           <Route path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
+          <Route path="/report" element={<ProtectedRoute component={CategoryReport} />} />
           <Route path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
           <Route path="/income" element={<ProtectedRoute component={Income} />} />
           <Route path="/expense" element={<ProtectedRoute component={Expense} />} />
@@ -94,7 +94,7 @@ const ProtectedRoute = ({ component: Component }) => {
         .then(() => setLoading(false))
         .catch(() => setLoading(false)); 
     }
-  }, [token, location.pathname]);
+  }, [token]);
 
   if (!token) return <Navigate to="/login" />;
   if (loading) return <div>Loading...</div>;
