@@ -3,6 +3,7 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import BudgetOverView from "../../components/Budget/BudgetOverView";
 
 const SetupBudget = ({ income, budget, categories, updateBudget }) => {
+  console.log("setupbudget rendering");
   return (
     <DashboardLayout activeMenu="Budget">
       <div className="my-5 mx-auto">

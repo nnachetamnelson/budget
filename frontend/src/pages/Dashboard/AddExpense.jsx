@@ -3,7 +3,9 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import AddExpenseOverView from "../../components/AddExpense/AddExpenseOverView";
 
 const AddExpense = ({ expenseHistory, handleAddExpense, categories }) => {
+  console.log("AddExpense rendering");
   return (
+   
     <DashboardLayout activeMenu="AddExpense">
       <div className="my-5 mx-auto">
         <AddExpenseOverView

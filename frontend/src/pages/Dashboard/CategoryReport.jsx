@@ -5,6 +5,7 @@ import DashboardLayout from '../../components/layouts/DashboardLayout';
 
 
 const CategoryReport = ({ expenseHistory, budgetData }) => {
+  console.log("CategoryReport rendering");
   return (
     <DashboardLayout activeMenu="Reports">
       <div className="my-5 mx-auto">

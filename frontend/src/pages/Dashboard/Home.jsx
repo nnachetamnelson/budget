@@ -24,6 +24,8 @@ const Home = ({ income, budget, categories, expenseHistory, handleAddExpense }) 
     return <div>Loading...</div>;
   }
 
+  console.log("dashborad rendering");
+
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className="my-5 mx-auto">
