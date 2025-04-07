@@ -6,12 +6,14 @@ import Home from "./pages/Dashboard/Home";
 import CategoryReport from "./pages/Dashboard/CategoryReport";
 import AddExpense from "./pages/Dashboard/AddExpense";
 import SetupBudget from "./pages/Dashboard/SetupBudget";
+import Stats from "./pages/Dashboard/Stats";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
 import UserProvider, { UserContext } from "./context/UserContext";
 import { Toaster } from "react-hot-toast";
 import axiosInstance from "./utils/axiosInstance";
 import { API_PATHS } from "./utils/apiPaths";
+
 
 
 
@@ -27,6 +29,7 @@ const App = () => {
           <Route path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
           <Route path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
           <Route path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
+          <Route path="/stats" element={<ProtectedRoute component={Stats} />} />
           <Route path="/income" element={<ProtectedRoute component={Income} />} />
           <Route path="/expense" element={<ProtectedRoute component={Expense} />} />
         </Routes>
