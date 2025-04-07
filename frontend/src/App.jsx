@@ -23,12 +23,11 @@ const App = () => {
           <Route path="/" element={<Root />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/dashboard" element={<ProtectedRoute component={Home} />} />
-          <Route path="/report" element={<ProtectedRoute component={CategoryReport} />} />
-          <Route path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
-          <Route path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
-          <Route path="/income" element={<ProtectedRoute component={Income} />} />
-          <Route path="/expense" element={<ProtectedRoute component={Expense} />} />
+          
+          <Route path="/dashboard" element={<Home />} />
+          <Route path="/categoryreport" element={<CategoryReport />} />
+          <Route path="/addexpense" element={<AddExpense />} />
+          <Route path="/setupbudget" element={<SetupBudget />} />
         </Routes>
       </Router>
       <Toaster toastOptions={{ style: { fontSize: "13px" } }} />
