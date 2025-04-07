@@ -1,8 +1,7 @@
 
-import React from 'react';
-import ReportOverView from '../../components/Report/ReportOverView';
-import DashboardLayout from '../../components/layouts/DashboardLayout';
-
+import React from "react";
+import DashboardLayout from "./DashboardLayout";
+import ReportOverView from "./ReportOverView";
 
 const CategoryReport = ({ expenseHistory, budgetData }) => {
   console.log("CategoryReport rendering");
@@ -18,4 +17,3 @@ const CategoryReport = ({ expenseHistory, budgetData }) => {
 };
 
 export default CategoryReport;
-
