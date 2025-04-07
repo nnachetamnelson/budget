@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   PieChart,
   Pie,
@@ -19,24 +19,25 @@ const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
   const [pieData, setPieData] = useState([]);
   const [barData, setBarData] = useState([]);
 
-  useEffect(() => {
-    console.log("ReportOverView useEffect running");
+  // Memoize the derived data to prevent unnecessary re-computation
+  const pieChartData = useMemo(() => {
     if (!expenseHistory?.length || !budgetData || !Object.keys(budgetData).length) {
-      setPieData([]);
-      setBarData([]);
-      return;
+      return [];
     }
-
     const categoryTotals = expenseHistory.reduce((acc, expense) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
       return acc;
     }, {});
-    const pieChartData = Object.keys(categoryTotals).map((category) => ({
+    return Object.keys(categoryTotals).map((category) => ({
       name: category,
       value: categoryTotals[category],
     }));
-    setPieData(pieChartData);
+  }, [expenseHistory, budgetData]);
 
+  const barChartData = useMemo(() => {
+    if (!expenseHistory?.length || !budgetData || !Object.keys(budgetData).length) {
+      return [];
+    }
     const monthlyData = expenseHistory.reduce((acc, expense) => {
       const date = new Date(expense.date);
       const monthYear = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
@@ -46,13 +47,18 @@ const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
       acc[monthYear].expense += expense.amount;
       return acc;
     }, {});
-    const barChartData = Object.keys(monthlyData).map((month) => ({
+    return Object.keys(monthlyData).map((month) => ({
       name: month,
       expense: monthlyData[month].expense,
       income: budgetData.income || 0,
     }));
-    setBarData(barChartData);
   }, [expenseHistory, budgetData]);
+
+  useEffect(() => {
+    console.log("ReportOverView useEffect running");
+    setPieData(pieChartData);
+    setBarData(barChartData);
+  }, [pieChartData, barChartData]); // Depend on memoized data, not raw inputs
 
   return (
     <div className="p-6 space-y-8">
@@ -110,3 +116,4 @@ const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
 };
 
 export default ReportOverView;
+
