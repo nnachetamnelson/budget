@@ -25,13 +25,13 @@ const App = () => {
           <Route path="/" element={<Root />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-      <Route path="/dashboard" element={<ProtectedRoute component={Home} />} />
-          <Route path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
-          <Route path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
-          <Route path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
-          <Route path="/stats" element={<ProtectedRoute component={Stats} />} />
-          <Route path="/income" element={<ProtectedRoute component={Income} />} />
-          <Route path="/expense" element={<ProtectedRoute component={Expense} />} />
+      <Route key="dashboard" path="/dashboard" element={<ProtectedRoute component={Home} />} />
+          <Route key="addexpense" path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
+          <Route key="reports" path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
+          <Route key="setupbudget" path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
+          <Route key="stats" path="/stats" element={<ProtectedRoute component={Stats} />} />
+          <Route key="income" path="/income" element={<ProtectedRoute component={Income} />} />
+          <Route key="expense" path="/expense" element={<ProtectedRoute component={Expense} />} />
         </Routes>
       </Router>
       <Toaster toastOptions={{ style: { fontSize: "13px" } }} />
