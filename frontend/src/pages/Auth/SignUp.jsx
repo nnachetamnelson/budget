@@ -123,7 +123,7 @@ const SignUp = () => {
                     </button>
           
                     <p className='text-[13px] text-slate-800 mt-3'>
-                      Don't have an account?{" "}
+                      have an account?{" "}
                       <Link className='font-medium text-primary underline' to="/login">
                       Login
                       </Link>
