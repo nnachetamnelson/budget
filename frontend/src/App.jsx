@@ -23,11 +23,12 @@ const App = () => {
           <Route path="/" element={<Root />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          
-          <Route path="/dashboard" element={<Home />} />
-          <Route path="/categoryreport" element={<CategoryReport />} />
-          <Route path="/addexpense" element={<AddExpense />} />
-          <Route path="/setupbudget" element={<SetupBudget />} />
+      <Route path="/dashboard" element={<ProtectedRoute component={Home} />} />
+          <Route path="/report" element={<ProtectedRoute component={CategoryReport} />} />
+          <Route path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
+          <Route path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
+          <Route path="/income" element={<ProtectedRoute component={Income} />} />
+          <Route path="/expense" element={<ProtectedRoute component={Expense} />} />
         </Routes>
       </Router>
       <Toaster toastOptions={{ style: { fontSize: "13px" } }} />
@@ -93,7 +94,7 @@ const ProtectedRoute = ({ component: Component }) => {
         .then(() => setLoading(false))
         .catch(() => setLoading(false)); 
     }
-  }, [token]);
+  }, [token, location.pathname]);
 
   if (!token) return <Navigate to="/login" />;
   if (loading) return <div>Loading...</div>;
