@@ -1,4 +1,4 @@
-import { LuHandCoins, LuLayoutDashboard, LuLogOut, LuWalletMinimal } from "react-icons/lu";
+import { LuHandCoins, LuLayoutDashboard, LuLogOut } from "react-icons/lu";
 
 
 export const SIDE_MENU_DATA = [
@@ -22,8 +22,8 @@ export const SIDE_MENU_DATA = [
         path: "/setupbudget",
     },
     {
-        id: "03",
-        label: "Budgets",
+        id: "04",
+        label: "Reports",
         icon: LuHandCoins,
         path: "/categoryreport",
     },
