@@ -1,6 +1,7 @@
 import React from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import ReportOverView from "../../components/Report/ReportOverView";
+
+import BudgetOverView from "../../components/Budget/BudgetOverView";
 
 const SetupBudget = ({ income }) => {
   return (
