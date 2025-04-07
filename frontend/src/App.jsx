@@ -25,7 +25,7 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
       <Route path="/dashboard" element={<ProtectedRoute component={Home} />} />
           <Route path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
-          <Route path="/report" element={<ProtectedRoute component={CategoryReport} />} />
+          <Route path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
           <Route path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
           <Route path="/income" element={<ProtectedRoute component={Income} />} />
           <Route path="/expense" element={<ProtectedRoute component={Expense} />} />
