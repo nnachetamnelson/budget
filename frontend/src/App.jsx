@@ -13,6 +13,8 @@ import { Toaster } from "react-hot-toast";
 import axiosInstance from "./utils/axiosInstance";
 import { API_PATHS } from "./utils/apiPaths";
 
+
+
 const App = () => {
   return (
     <UserProvider>
