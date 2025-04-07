@@ -46,7 +46,9 @@ const ProtectedRoute = ({ component: Component }) => {
   const [budgetData, setBudgetData] = useState(null);
   const [expenseHistory, setExpenseHistory] = useState([]);
   const [loading, setLoading] = useState(true);
-  const location = useLocation(); // Add this to track route changes
+  const location = useLocation();
+
+  console.log(`ProtectedRoute rendering for path: ${location.pathname}, Component: ${Component.name}`);
 
   const fetchBudgetData = async () => {
     try {
@@ -90,17 +92,31 @@ const ProtectedRoute = ({ component: Component }) => {
   };
 
   useEffect(() => {
+    console.log(`useEffect triggered for path: ${location.pathname}, token: ${token ? 'present' : 'absent'}`);
     if (token) {
-      setLoading(true); 
+      setLoading(true);
       Promise.all([fetchBudgetData(), fetchExpenses()])
-        .then(() => setLoading(false))
-        .catch(() => setLoading(false));
+        .then(() => {
+          console.log(`Data fetch completed for path: ${location.pathname}`);
+          setLoading(false);
+        })
+        .catch(() => {
+          console.log(`Data fetch failed for path: ${location.pathname}`);
+          setLoading(false);
+        });
     }
-  }, [token, location.pathname]); 
+  }, [token, location.pathname]);
 
-  if (!token) return <Navigate to="/login" />;
-  if (loading) return <div>Loading...</div>;
+  if (!token) {
+    console.log("No token, redirecting to /login");
+    return <Navigate to="/login" />;
+  }
+  if (loading) {
+    console.log(`Showing loading screen for path: ${location.pathname}`);
+    return <div>Loading...</div>;
+  }
 
+  console.log(`Rendering Component: ${Component.name} for path: ${location.pathname}`);
   return (
     <Component
       income={budgetData?.income || 0}
