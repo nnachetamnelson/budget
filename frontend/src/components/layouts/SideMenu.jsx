@@ -55,7 +55,7 @@ const SideMenu = () => {
                             className={`w-full flex items-center gap-4 text-[15px] py-3 px-6 rounded-lg mb-3 transition-all duration-300 
                                 ${
                                     location.pathname === item.path
-                                        ? "bg-primary text-white font-semibold"
+                                        ? "bg-blue-100 text-white font-semibold"
                                         : "text-gray-600 hover:bg-gray-100"
                                 }`}
                             onClick={() => handleClick(item.path)}
