@@ -20,7 +20,7 @@ export const SIDE_MENU_DATA = [
         id: "03",
         label: "Reports",
         icon: LuHandCoins,
-        path: "/categoryreport",
+        path: "/report",
     },
     {
         id: "04",
