@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Login from "./pages/Auth/Login";
 import SignUp from "./pages/Auth/SignUp";
 import Home from "./pages/Dashboard/Home";
@@ -14,9 +14,6 @@ import { Toaster } from "react-hot-toast";
 import axiosInstance from "./utils/axiosInstance";
 import { API_PATHS } from "./utils/apiPaths";
 
-
-
-
 const App = () => {
   return (
     <UserProvider>
@@ -25,7 +22,7 @@ const App = () => {
           <Route path="/" element={<Root />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-      <Route key="dashboard" path="/dashboard" element={<ProtectedRoute component={Home} />} />
+          <Route key="dashboard" path="/dashboard" element={<ProtectedRoute component={Home} />} />
           <Route key="addexpense" path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
           <Route key="reports" path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
           <Route key="setupbudget" path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
@@ -49,15 +46,16 @@ const ProtectedRoute = ({ component: Component }) => {
   const [budgetData, setBudgetData] = useState(null);
   const [expenseHistory, setExpenseHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const location = useLocation(); // Add this to track route changes
 
   const fetchBudgetData = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.API.GET_BUDGET_API);
-      console.log("Budget Data Fetched:", response.data); 
+      console.log("Budget Data Fetched:", response.data);
       setBudgetData(response.data || { income: 0, totalBudget: 0, categories: {} });
     } catch (error) {
       console.error("Error fetching budget:", error);
-      setBudgetData({ income: 0, totalBudget: 0, categories: {} }); 
+      setBudgetData({ income: 0, totalBudget: 0, categories: {} });
     }
   };
 
@@ -76,7 +74,7 @@ const ProtectedRoute = ({ component: Component }) => {
     try {
       const response = await axiosInstance.post(API_PATHS.API.ADD_EXPENSE_API, expense);
       setExpenseHistory((prev) => [response.data, ...prev]);
-      await fetchBudgetData(); 
+      await fetchBudgetData();
     } catch (error) {
       console.error("Error adding expense:", error);
     }
@@ -93,11 +91,12 @@ const ProtectedRoute = ({ component: Component }) => {
 
   useEffect(() => {
     if (token) {
+      setLoading(true); 
       Promise.all([fetchBudgetData(), fetchExpenses()])
         .then(() => setLoading(false))
-        .catch(() => setLoading(false)); 
+        .catch(() => setLoading(false));
     }
-  }, [token]);
+  }, [token, location.pathname]); 
 
   if (!token) return <Navigate to="/login" />;
   if (loading) return <div>Loading...</div>;
@@ -115,4 +114,3 @@ const ProtectedRoute = ({ component: Component }) => {
 };
 
 export default App;
-
