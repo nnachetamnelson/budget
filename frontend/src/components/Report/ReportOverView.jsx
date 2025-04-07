@@ -17,25 +17,35 @@ const COLORS = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#ff99ff', '#b3b3ff'
 
 const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
   console.log("ReportOverView rendering");
+  console.log("Received expenseHistory:", expenseHistory);
+  console.log("Received budgetData:", budgetData);
 
   const pieChartData = useMemo(() => {
     console.log("Computing pieChartData");
+    console.log("expenseHistory length:", expenseHistory?.length);
+    console.log("budgetData exists:", !!budgetData);
+    console.log("budgetData keys:", Object.keys(budgetData).length);
     if (!expenseHistory?.length || !budgetData || !Object.keys(budgetData).length) {
+      console.log("Returning empty pieChartData due to invalid inputs");
       return [];
     }
     const categoryTotals = expenseHistory.reduce((acc, expense) => {
+      console.log("Processing expense:", expense);
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
       return acc;
     }, {});
-    return Object.keys(categoryTotals).map((category) => ({
+    const result = Object.keys(categoryTotals).map((category) => ({
       name: category,
       value: categoryTotals[category],
     }));
+    console.log("Computed pieChartData:", result);
+    return result;
   }, [expenseHistory, budgetData]);
 
   const barChartData = useMemo(() => {
     console.log("Computing barChartData");
     if (!expenseHistory?.length || !budgetData || !Object.keys(budgetData).length) {
+      console.log("Returning empty barChartData due to invalid inputs");
       return [];
     }
     const monthlyData = expenseHistory.reduce((acc, expense) => {
@@ -47,12 +57,17 @@ const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
       acc[monthYear].expense += expense.amount;
       return acc;
     }, {});
-    return Object.keys(monthlyData).map((month) => ({
+    const result = Object.keys(monthlyData).map((month) => ({
       name: month,
       expense: monthlyData[month].expense,
       income: budgetData.income || 0,
     }));
+    console.log("Computed barChartData:", result);
+    return result;
   }, [expenseHistory, budgetData]);
+
+  console.log("Final pieChartData length:", pieChartData.length);
+  console.log("Final barChartData length:", barChartData.length);
 
   return (
     <div className="p-6 space-y-8">
@@ -110,3 +125,5 @@ const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
 };
 
 export default ReportOverView;
+
+
