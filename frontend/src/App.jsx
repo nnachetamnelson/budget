@@ -14,7 +14,7 @@ import { Toaster } from "react-hot-toast";
 import axiosInstance from "./utils/axiosInstance";
 import { API_PATHS } from "./utils/apiPaths";
 
-
+// Error Boundary Component
 class ErrorBoundary extends React.Component {
   state = { hasError: false, error: null };
   static getDerivedStateFromError(error) {
@@ -110,17 +110,11 @@ const ProtectedRoute = ({ component: Component }) => {
     }
   };
 
-
   useEffect(() => {
     console.log(`useEffect triggered for path: ${location.pathname}, token: ${token ? 'present' : 'absent'}`);
     if (token && (budgetData === null || expenseHistory.length === 0)) {
-      Promise.all([fetchBudgetData(), fetchExpenses()])
-        .then(() => {
-          console.log(`Data fetch completed for path: ${location.pathname}`);
-        })
-        .catch(() => {
-          console.log(`Data fetch failed for path: ${location.pathname}`);
-        });
+      fetchBudgetData();
+      fetchExpenses();
     }
   }, [token]);
 
@@ -132,7 +126,7 @@ const ProtectedRoute = ({ component: Component }) => {
   console.log(`Rendering Component: ${Component.name} for path: ${location.pathname}`);
   return (
     <Component
-      budgetData={budgetData}  
+      budgetData={budgetData}
       expenseHistory={expenseHistory}
       handleAddExpense={handleAddExpense}
       updateBudget={handleUpdateBudget}

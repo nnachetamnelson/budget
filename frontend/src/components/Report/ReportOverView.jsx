@@ -13,8 +13,6 @@ import {
   Legend,
 } from 'recharts';
 
-
-
 const COLORS = ['#ff9999', '#66b3ff', '#99ff99', '#ffcc99', '#ff99ff', '#b3b3ff', '#ffb366', '#80ffaa', '#ff80bf', '#cc99ff'];
 
 const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
@@ -127,5 +125,4 @@ const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
 };
 
 export default ReportOverView;
-
 
