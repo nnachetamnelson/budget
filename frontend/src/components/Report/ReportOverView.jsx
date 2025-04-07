@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import {
   PieChart,
@@ -21,9 +20,13 @@ const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
   const [barData, setBarData] = useState([]);
 
   useEffect(() => {
-    if (!expenseHistory.length && !Object.keys(budgetData).length) return; 
+    console.log("ReportOverView useEffect running");
+    if (!expenseHistory?.length || !budgetData || !Object.keys(budgetData).length) {
+      setPieData([]);
+      setBarData([]);
+      return;
+    }
 
- 
     const categoryTotals = expenseHistory.reduce((acc, expense) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
       return acc;
@@ -34,7 +37,6 @@ const ReportOverView = ({ expenseHistory = [], budgetData = {} }) => {
     }));
     setPieData(pieChartData);
 
-    
     const monthlyData = expenseHistory.reduce((acc, expense) => {
       const date = new Date(expense.date);
       const monthYear = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;

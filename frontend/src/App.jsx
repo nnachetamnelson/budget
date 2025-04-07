@@ -14,22 +14,41 @@ import { Toaster } from "react-hot-toast";
 import axiosInstance from "./utils/axiosInstance";
 import { API_PATHS } from "./utils/apiPaths";
 
+
+class ErrorBoundary extends React.Component {
+  state = { hasError: false, error: null };
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, info) {
+    console.error("ErrorBoundary caught:", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return <div>Error: {this.state.error?.message || "Something went wrong"}</div>;
+    }
+    return this.props.children;
+  }
+}
+
 const App = () => {
   return (
     <UserProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<Root />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route key="dashboard" path="/dashboard" element={<ProtectedRoute component={Home} />} />
-          <Route key="addexpense" path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
-          <Route key="reports" path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
-          <Route key="setupbudget" path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
-          <Route key="stats" path="/stats" element={<ProtectedRoute component={Stats} />} />
-          <Route key="income" path="/income" element={<ProtectedRoute component={Income} />} />
-          <Route key="expense" path="/expense" element={<ProtectedRoute component={Expense} />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Root />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route key="dashboard" path="/dashboard" element={<ProtectedRoute component={Home} />} />
+            <Route key="addexpense" path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
+            <Route key="reports" path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
+            <Route key="setupbudget" path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
+            <Route key="stats" path="/stats" element={<ProtectedRoute component={Stats} />} />
+            <Route key="income" path="/income" element={<ProtectedRoute component={Income} />} />
+            <Route key="expense" path="/expense" element={<ProtectedRoute component={Expense} />} />
+          </Routes>
+        </ErrorBoundary>
       </Router>
       <Toaster toastOptions={{ style: { fontSize: "13px" } }} />
     </UserProvider>
@@ -48,7 +67,6 @@ const ProtectedRoute = ({ component: Component }) => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
-  // Log URL on every render
   console.log(`Current URL: ${location.pathname}`);
   console.log(`ProtectedRoute rendering for path: ${location.pathname}, Component: ${Component.name}`);
 
