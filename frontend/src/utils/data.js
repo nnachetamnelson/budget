@@ -28,12 +28,7 @@ export const SIDE_MENU_DATA = [
         icon: LuHandCoins,
         path: "/setupbudget",
     },
-    {
-        id: "05",
-        label: "Stat",
-        icon: LuHandCoins,
-        path: "/stats",
-    },
+   
     
     {
         id: "05",
