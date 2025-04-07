@@ -15,17 +15,18 @@ export const SIDE_MENU_DATA = [
         icon: LuHandCoins,
         path: "/addexpense",
     },
+    
     {
         id: "03",
-        label: "Budget",
-        icon: LuHandCoins,
-        path: "/setupbudget",
-    },
-    {
-        id: "04",
         label: "Reports",
         icon: LuHandCoins,
         path: "/categoryreport",
+    },
+    {
+        id: "04",
+        label: "Budget",
+        icon: LuHandCoins,
+        path: "/setupbudget",
     },
     
     {
