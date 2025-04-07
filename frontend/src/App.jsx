@@ -48,6 +48,8 @@ const ProtectedRoute = ({ component: Component }) => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
 
+  // Log URL on every render
+  console.log(`Current URL: ${location.pathname}`);
   console.log(`ProtectedRoute rendering for path: ${location.pathname}, Component: ${Component.name}`);
 
   const fetchBudgetData = async () => {

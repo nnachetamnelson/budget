@@ -7,26 +7,29 @@ import CharAvatar from "../Cards/CharAvatar";
 const SideMenu = () => {
     const { user, clearUser } = useContext(UserContext);
     const navigate = useNavigate();
-    const location = useLocation(); // Get current route
+    const location = useLocation(); 
 
     const handleClick = (route) => { 
+        console.log(`SideMenu: Navigating to ${route} from ${location.pathname}`);
         if (route === "logout") {  
             handleLogout();
             return; 
         }
         navigate(route); 
+        console.log(`SideMenu: Navigation triggered to ${route}`);
     };
 
     const handleLogout = () => { 
+        console.log("SideMenu: Logging out");
         localStorage.clear();
         clearUser();
         navigate("/login"); 
+        console.log("SideMenu: Navigated to /login after logout");
     };
 
     return (
         <div className="w-64 h-[calc(100vh-61px)] bg-white border-r border-gray-200/50 p-5 sticky top-[61px] z-20">
             <div className="flex flex-col items-center justify-center gap-3 mt-3 mb-7">
-               
                 {!user?.profileImageUrl ? (
                     <CharAvatar
                         fullName={user?.fullName || "User"}
@@ -42,12 +45,11 @@ const SideMenu = () => {
                     />
                 )}
 
-             
                 <h5 className="text-gray-950 font-medium leading-6">
                     {user?.fullName || "User"}
                 </h5>
 
-                {/* Menu Items */}
+             
                 <div className="w-full mt-5">
                     {SIDE_MENU_DATA.map((item, index) => (
                         <button
