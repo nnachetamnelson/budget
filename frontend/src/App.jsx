@@ -6,7 +6,6 @@ import Home from "./pages/Dashboard/Home";
 import CategoryReport from "./pages/Dashboard/CategoryReport";
 import AddExpense from "./pages/Dashboard/AddExpense";
 import SetupBudget from "./pages/Dashboard/SetupBudget";
-import Stats from "./pages/Dashboard/Stats";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
 import UserProvider, { UserContext } from "./context/UserContext";
