@@ -3,6 +3,9 @@ import { toast } from "react-hot-toast";
 import Tesseract from "tesseract.js";
 
 const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) => {
+  console.log("AddExpenseOverView rendering");
+  console.log("Categories:", categories); 
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
@@ -61,7 +64,7 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) =>
       if (amountMatch) setAmount(amountMatch[1]);
       if (dateMatch) {
         const parsedDate = new Date(dateMatch[1]);
-        setDate(parsedDate.toISOString().slice(0, 10)); 
+        setDate(parsedDate.toISOString().slice(0, 10));
       }
       if (descriptionMatch) setDescription(descriptionMatch[1].trim());
       setCategory("Other");
@@ -262,3 +265,4 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) =>
 };
 
 export default AddExpenseOverView;
+
