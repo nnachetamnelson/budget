@@ -30,12 +30,16 @@ export const API_PATHS = {
         DELETE_CATEGORY: (categoryId) => `/api/v1/categories/delete`,
         DOWNLOAD_CATEGORY: '/api/v1//categories/downloadexcel',
     },
+   
     API: {
-        ADD_API: '/api/v1/api/budget',
-        GET_BUDGET_API: '/api/v1/api/budget',
-        ADD_EXPENSE_API:'/api/v1/api/expenses',
-        GET_EXPENSE_API: '/api/v1/api/expenses',
+        ADD_BUDGET_API: '/api/v1/budget',
+        GET_BUDGET_API: '/api/v1/budget',
+        ADD_EXPENSE_API: '/api/v1/expenses',
+        GET_EXPENSE_API: '/api/v1/expenses',
+        EDIT_EXPENSE_API: (id) => `/api/v1/expenses/${id}`,
+        DELETE_EXPENSE_API: (id) => `/api/v1/expenses/${id}`,
     },
+    
     BUDGET: {
         ADD_BUDGET: '/api/v1/budget/create',
         GET_ALL_BUDGET: '/api/v1/budget/get',

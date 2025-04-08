@@ -105,7 +105,7 @@ const ProtectedRoute = ({ component: Component }) => {
 
   const handleEditExpense = async (id, updatedExpense) => {
     try {
-      const response = await axiosInstance.put(`${API_PATHS.API.ADD_EXPENSE_API}/${id}`, updatedExpense);
+      const response = await axiosInstance.put(`${API_PATHS.API.EDIT_EXPENSE_API}/${id}`, updatedExpense);
       console.log("Edit response:", response.data);
       setExpenseHistory((prev) =>
         prev.map((exp) => (exp._id === id ? { ...exp, ...response.data } : exp))
@@ -124,7 +124,7 @@ const ProtectedRoute = ({ component: Component }) => {
   
   const handleDeleteExpense = async (id) => {
     try {
-      const response = await axiosInstance.delete(`${API_PATHS.API.ADD_EXPENSE_API}/${id}`);
+      const response = await axiosInstance.delete(`${API_PATHS.API.DELETE_EXPENSE_API}/${id}`);
       console.log("Delete response:", response.data);
       setExpenseHistory((prev) => prev.filter((exp) => exp._id !== id));
       await fetchBudgetData();
