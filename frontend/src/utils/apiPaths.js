@@ -32,12 +32,12 @@ export const API_PATHS = {
     },
    
     API: {
-        ADD_BUDGET_API: '/api/v1/budget',
-        GET_BUDGET_API: '/api/v1/budget',
-        ADD_EXPENSE_API: '/api/v1/expenses',
-        GET_EXPENSE_API: '/api/v1/expenses',
-        EDIT_EXPENSE_API: (id) => `/api/v1/expenses/${id}`,
-        DELETE_EXPENSE_API: (id) => `/api/v1/expenses/${id}`,
+        ADD_BUDGET_API: '/api/v1/api/budget',
+        GET_BUDGET_API: '/api/v1/api/budget',
+        ADD_EXPENSE_API: '/api/v1/api/expenses',
+        GET_EXPENSE_API: '/api/v1/api/expenses',
+        EDIT_EXPENSE_API: (id) => `/api/v1/api/expenses/${id}`,
+        DELETE_EXPENSE_API: (id) => `/api/v1/api/expenses/${id}`,
     },
     
     BUDGET: {
