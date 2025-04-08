@@ -185,8 +185,3 @@ const ProtectedRoute = ({ component: Component }) => {
 };
 
 export default App;
-
-
-
-
-
