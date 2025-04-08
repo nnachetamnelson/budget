@@ -121,7 +121,7 @@ const ProtectedRoute = ({ component: Component }) => {
       throw error;
     }
   };
-  
+
   
   const handleDeleteExpense = async (id) => {
     try {
