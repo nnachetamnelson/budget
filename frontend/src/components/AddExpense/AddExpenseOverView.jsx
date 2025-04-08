@@ -5,6 +5,7 @@ import Tesseract from "tesseract.js";
 const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpense, handleDeleteExpense, categories }) => {
   console.log("AddExpenseOverView rendering");
   console.log("Categories:", categories);
+  console.log("ExpenseHistory sample:", expenseHistory[0]); // Add this
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -291,7 +292,7 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpens
                   <td className="py-2 px-4">{formatDate(expense.date)}</td>
                   <td className="py-2 px-4">{expense.description}</td>
                   <td className="py-2 px-4">
-                    <span className={`py-1 px-2 rounded-full ${categoryStyles[expense.category]}`}>
+                    <span className={`py-1 px-2 rounded-full ${categoryStyles[expense.category] || categoryStyles.Other}`}>
                       {expense.category}
                     </span>
                   </td>
@@ -330,6 +331,4 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpens
 };
 
 export default AddExpenseOverView;
-
-
 
