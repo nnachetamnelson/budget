@@ -101,30 +101,44 @@ const ProtectedRoute = ({ component: Component }) => {
     }
   };
 
+
+
   const handleEditExpense = async (id, updatedExpense) => {
     try {
       const response = await axiosInstance.put(`${API_PATHS.API.ADD_EXPENSE_API}/${id}`, updatedExpense);
+      console.log("Edit response:", response.data);
       setExpenseHistory((prev) =>
         prev.map((exp) => (exp._id === id ? { ...exp, ...response.data } : exp))
       );
       await fetchBudgetData();
       return response.data;
     } catch (error) {
-      console.error("Error editing expense:", error);
+      console.error("Edit expense failed:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      throw error;
+    }
+  };
+  
+  const handleDeleteExpense = async (id) => {
+    try {
+      const response = await axiosInstance.delete(`${API_PATHS.API.ADD_EXPENSE_API}/${id}`);
+      console.log("Delete response:", response.data);
+      setExpenseHistory((prev) => prev.filter((exp) => exp._id !== id));
+      await fetchBudgetData();
+    } catch (error) {
+      console.error("Delete expense failed:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
       throw error;
     }
   };
 
-  const handleDeleteExpense = async (id) => {
-    try {
-      await axiosInstance.delete(`${API_PATHS.API.ADD_EXPENSE_API}/${id}`);
-      setExpenseHistory((prev) => prev.filter((exp) => exp._id !== id));
-      await fetchBudgetData();
-    } catch (error) {
-      console.error("Error deleting expense:", error);
-      throw error;
-    }
-  };
+
 
   const handleUpdateBudget = async (updatedBudget) => {
     try {

@@ -70,74 +70,77 @@ router.post("/expenses", Protect, async (req, res) => {
   }
 });
 
-
 router.put("/expenses/:id", Protect, async (req, res) => {
-  try {
-    const { amount, category, description, paymentMethod, date } = req.body;
-    const expenseId = req.params.id;
-
-
-    const existingExpense = await Expense.findById(expenseId);
-    if (!existingExpense || existingExpense.userId.toString() !== req.user._id.toString()) {
-      return res.status(404).json({ message: "Expense not found or unauthorized" });
-    }
-
-
-    const updatedExpense = await Expense.findByIdAndUpdate(
-      expenseId,
-      { amount, category, description, paymentMethod, date },
-      { new: true }
-    );
-
-
-    const budget = await Budget.findOne({ userId: req.user._id });
-    if (budget) {
-      if (budget.categories.has(existingExpense.category)) {
-        budget.categories.set(
-          existingExpense.category,
-          budget.categories.get(existingExpense.category) + existingExpense.amount
-        );
+    try {
+      console.log("PUT /expenses/:id received:", { id: req.params.id, body: req.body });
+      const { amount, category, description, paymentMethod, date } = req.body;
+      const expenseId = req.params.id;
+  
+      const existingExpense = await Expense.findById(expenseId);
+      if (!existingExpense || existingExpense.userId.toString() !== req.user._id.toString()) {
+        console.log("Expense not found or unauthorized:", expenseId);
+        return res.status(404).json({ message: "Expense not found or unauthorized" });
       }
-      if (budget.categories.has(category)) {
-        budget.categories.set(category, budget.categories.get(category) - amount);
-      }
-      await budget.save();
-    }
-
-    res.json(updatedExpense);
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
-  }
-});
-
-
-router.delete("/expenses/:id", Protect, async (req, res) => {
-  try {
-    const expenseId = req.params.id;
-
-
-    const expense = await Expense.findById(expenseId);
-    if (!expense || expense.userId.toString() !== req.user._id.toString()) {
-      return res.status(404).json({ message: "Expense not found or unauthorized" });
-    }
-
-    await Expense.findByIdAndDelete(expenseId);
-
-
-    const budget = await Budget.findOne({ userId: req.user._id });
-    if (budget && budget.categories.has(expense.category)) {
-      budget.categories.set(
-        expense.category,
-        budget.categories.get(expense.category) + expense.amount
+  
+      const updatedExpense = await Expense.findByIdAndUpdate(
+        expenseId,
+        { amount, category, description, paymentMethod, date },
+        { new: true }
       );
-      await budget.save();
+  
+      const budget = await Budget.findOne({ userId: req.user._id });
+      if (budget) {
+        if (budget.categories.has(existingExpense.category)) {
+          budget.categories.set(
+            existingExpense.category,
+            budget.categories.get(existingExpense.category) + existingExpense.amount
+          );
+        }
+        if (budget.categories.has(category)) {
+          budget.categories.set(category, budget.categories.get(category) - amount);
+        }
+        console.log("Budget updated:", budget.categories);
+        await budget.save();
+      }
+  
+      console.log("Expense updated:", updatedExpense);
+      res.json(updatedExpense);
+    } catch (error) {
+      console.error("PUT /expenses/:id error:", error);
+      res.status(500).json({ message: "Server error", error });
     }
-
-    res.json({ message: "Expense deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error });
-  }
-});
+  });
+  
+  router.delete("/expenses/:id", Protect, async (req, res) => {
+    try {
+      console.log("DELETE /expenses/:id received:", req.params.id);
+      const expenseId = req.params.id;
+  
+      const expense = await Expense.findById(expenseId);
+      if (!expense || expense.userId.toString() !== req.user._id.toString()) {
+        console.log("Expense not found or unauthorized:", expenseId);
+        return res.status(404).json({ message: "Expense not found or unauthorized" });
+      }
+  
+      await Expense.findByIdAndDelete(expenseId);
+  
+      const budget = await Budget.findOne({ userId: req.user._id });
+      if (budget && budget.categories.has(expense.category)) {
+        budget.categories.set(
+          expense.category,
+          budget.categories.get(expense.category) + expense.amount
+        );
+        console.log("Budget updated:", budget.categories);
+        await budget.save();
+      }
+  
+      console.log("Expense deleted:", expenseId);
+      res.json({ message: "Expense deleted successfully" });
+    } catch (error) {
+      console.error("DELETE /expenses/:id error:", error);
+      res.status(500).json({ message: "Server error", error });
+    }
+  });
 
 module.exports = router;
 
