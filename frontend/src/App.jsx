@@ -54,6 +54,7 @@ const App = () => {
   );
 };
 
+
 const Root = () => {
   const { token } = useContext(UserContext);
   return token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />;
