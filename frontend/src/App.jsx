@@ -122,6 +122,7 @@ const ProtectedRoute = ({ component: Component }) => {
     }
   };
   
+  
   const handleDeleteExpense = async (id) => {
     try {
       const response = await axiosInstance.delete(`${API_PATHS.API.DELETE_EXPENSE_API}/${id}`);
