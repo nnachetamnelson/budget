@@ -44,7 +44,6 @@ const App = () => {
             <Route key="addexpense" path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
             <Route key="reports" path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
             <Route key="setupbudget" path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
-            <Route key="stats" path="/stats" element={<ProtectedRoute component={Stats} />} />
             <Route key="income" path="/income" element={<ProtectedRoute component={Income} />} />
             <Route key="expense" path="/expense" element={<ProtectedRoute component={Expense} />} />
           </Routes>
