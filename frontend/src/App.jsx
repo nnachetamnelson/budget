@@ -6,6 +6,7 @@ import Home from "./pages/Dashboard/Home";
 import CategoryReport from "./pages/Dashboard/CategoryReport";
 import AddExpense from "./pages/Dashboard/AddExpense";
 import SetupBudget from "./pages/Dashboard/SetupBudget";
+import Stats from "./pages/Dashboard/Stats";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
 import UserProvider, { UserContext } from "./context/UserContext";
@@ -42,6 +43,7 @@ const App = () => {
             <Route key="addexpense" path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
             <Route key="reports" path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
             <Route key="setupbudget" path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
+            <Route key="stats" path="/stats" element={<ProtectedRoute component={Stats} />} />
             <Route key="income" path="/income" element={<ProtectedRoute component={Income} />} />
             <Route key="expense" path="/expense" element={<ProtectedRoute component={Expense} />} />
           </Routes>
@@ -65,15 +67,16 @@ const ProtectedRoute = ({ component: Component }) => {
 
   console.log(`Current URL: ${location.pathname}`);
   console.log(`ProtectedRoute rendering for path: ${location.pathname}, Component: ${Component.name}`);
+  console.log("App.jsx version: NO_LOADING_2025");
 
   const fetchBudgetData = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.API.GET_BUDGET_API);
       console.log("Budget Data Fetched:", response.data);
-      setBudgetData(response.data || { income: 0, totalBudget: 0, categories: {} });
+      setBudgetData(response.data || { income: 0, totalBudget: 0, categories: new Map() });
     } catch (error) {
       console.error("Error fetching budget:", error);
-      setBudgetData({ income: 0, totalBudget: 0, categories: {} });
+      setBudgetData({ income: 0, totalBudget: 0, categories: new Map() });
     }
   };
 
@@ -93,8 +96,35 @@ const ProtectedRoute = ({ component: Component }) => {
       const response = await axiosInstance.post(API_PATHS.API.ADD_EXPENSE_API, expense);
       setExpenseHistory((prev) => [response.data, ...prev]);
       await fetchBudgetData();
+      return response.data;
     } catch (error) {
       console.error("Error adding expense:", error);
+      throw error;
+    }
+  };
+
+  const handleEditExpense = async (id, updatedExpense) => {
+    try {
+      const response = await axiosInstance.put(`${API_PATHS.API.ADD_EXPENSE_API}/${id}`, updatedExpense);
+      setExpenseHistory((prev) =>
+        prev.map((exp) => (exp._id === id ? { ...exp, ...response.data } : exp))
+      );
+      await fetchBudgetData();
+      return response.data;
+    } catch (error) {
+      console.error("Error editing expense:", error);
+      throw error;
+    }
+  };
+
+  const handleDeleteExpense = async (id) => {
+    try {
+      await axiosInstance.delete(`${API_PATHS.API.ADD_EXPENSE_API}/${id}`);
+      setExpenseHistory((prev) => prev.filter((exp) => exp._id !== id));
+      await fetchBudgetData();
+    } catch (error) {
+      console.error("Error deleting expense:", error);
+      throw error;
     }
   };
 
@@ -128,10 +158,13 @@ const ProtectedRoute = ({ component: Component }) => {
       budgetData={budgetData}
       expenseHistory={expenseHistory}
       handleAddExpense={handleAddExpense}
+      handleEditExpense={handleEditExpense}
+      handleDeleteExpense={handleDeleteExpense}
       updateBudget={handleUpdateBudget}
     />
   );
 };
 
 export default App;
+
 

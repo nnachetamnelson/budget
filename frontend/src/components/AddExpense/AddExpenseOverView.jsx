@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import Tesseract from "tesseract.js";
 
-const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) => {
+const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpense, handleDeleteExpense, categories }) => {
   console.log("AddExpenseOverView rendering");
-  console.log("Categories:", categories); 
+  console.log("Categories:", categories);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editExpenseId, setEditExpenseId] = useState(null);
   const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -16,21 +18,35 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) =>
 
   const paymentMethods = ["Cash", "Credit Card", "Debit Card", "Bank Transfer", "Receipt"];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (amount && category && description && paymentMethod && date) {
-      handleAddExpense({
-        amount: Number(amount),
-        category,
-        description,
-        paymentMethod,
-        date,
-      });
-      toast.success("Expense added successfully!");
+    if (!amount || !category || !description || !paymentMethod || !date) {
+      toast.error("Please fill all fields!");
+      return;
+    }
+
+    const expenseData = {
+      amount: Number(amount),
+      category,
+      description,
+      paymentMethod,
+      date,
+    };
+
+    try {
+      if (editMode) {
+        await handleEditExpense(editExpenseId, expenseData);
+        toast.success("Expense updated successfully!");
+      } else {
+        await handleAddExpense(expenseData);
+        toast.success("Expense added successfully!");
+      }
       resetForm();
       setIsModalOpen(false);
-    } else {
-      toast.error("Please fill all fields!");
+      setEditMode(false);
+      setEditExpenseId(null);
+    } catch (error) {
+      toast.error(`Failed to ${editMode ? "update" : "add"} expense.`);
     }
   };
 
@@ -40,6 +56,30 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) =>
     setDescription("");
     setPaymentMethod("Receipt");
     setDate("");
+    setEditMode(false);
+    setEditExpenseId(null);
+  };
+
+  const handleEditClick = (expense) => {
+    setEditMode(true);
+    setEditExpenseId(expense._id);
+    setAmount(expense.amount.toString());
+    setCategory(expense.category);
+    setDescription(expense.description);
+    setPaymentMethod(expense.paymentMethod);
+    setDate(new Date(expense.date).toISOString().slice(0, 10));
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = async (id) => {
+    if (window.confirm("Are you sure you want to delete this expense?")) {
+      try {
+        await handleDeleteExpense(id);
+        toast.success("Expense deleted successfully!");
+      } catch (error) {
+        toast.error("Failed to delete expense.");
+      }
+    }
   };
 
   const handleReceiptUpload = async (e) => {
@@ -115,7 +155,9 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) =>
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 transform transition-all duration-300 scale-100">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="text-xl font-semibold text-gray-800">Add New Expense</h3>
+              <h3 className="text-xl font-semibold text-gray-800">
+                {editMode ? "Edit Expense" : "Add New Expense"}
+              </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
                 className="text-gray-500 hover:text-gray-700 transition duration-200"
@@ -222,7 +264,7 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) =>
                   type="submit"
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
                 >
-                  Add Expense
+                  {editMode ? "Update Expense" : "Add Expense"}
                 </button>
               </div>
             </form>
@@ -239,24 +281,47 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) =>
               <th className="py-2 px-4 text-left">Category</th>
               <th className="py-2 px-4 text-left">Payment Method</th>
               <th className="py-2 px-4 text-left">Amount</th>
+              <th className="py-2 px-4 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {expenseHistory.map((expense, index) => (
-              <tr key={index} className="border-b hover:bg-gray-100">
-                <td className="py-2 px-4">{formatDate(expense.date)}</td>
-                <td className="py-2 px-4">{expense.description}</td>
-                <td className="py-2 px-4">
-                  <span className={`py-1 px-2 rounded-full ${categoryStyles[expense.category]}`}>
-                    {expense.category}
-                  </span>
-                </td>
-                <td className="py-2 px-4">{expense.paymentMethod}</td>
-                <td className={`py-2 px-4 ${amountStyles(expense.amount)}`}>
-                  £{expense.amount}
+            {expenseHistory.length > 0 ? (
+              expenseHistory.map((expense) => (
+                <tr key={expense._id} className="border-b hover:bg-gray-100">
+                  <td className="py-2 px-4">{formatDate(expense.date)}</td>
+                  <td className="py-2 px-4">{expense.description}</td>
+                  <td className="py-2 px-4">
+                    <span className={`py-1 px-2 rounded-full ${categoryStyles[expense.category]}`}>
+                      {expense.category}
+                    </span>
+                  </td>
+                  <td className="py-2 px-4">{expense.paymentMethod}</td>
+                  <td className={`py-2 px-4 ${amountStyles(expense.amount)}`}>
+                    £{expense.amount}
+                  </td>
+                  <td className="py-2 px-4 flex space-x-2">
+                    <button
+                      onClick={() => handleEditClick(expense)}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      ✏️ Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteClick(expense._id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      🗑️ Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="py-4 px-4 text-center text-gray-500">
+                  No expenses available yet.
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -265,4 +330,6 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, categories }) =>
 };
 
 export default AddExpenseOverView;
+
+
 
