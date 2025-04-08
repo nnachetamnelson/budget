@@ -1,30 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useUserAuth } from "../../hooks/useUserAuth";
-import axiosInstance from "../../utils/axiosInstance";
-import { API_PATHS } from "../../utils/apiPaths";
-import Dashboard from "../../components/Dashboards/Dashboard"; // Adjusted path
+import Dashboard from "../../components/Dashboards/Dashboard"; 
 
-const Home = ({ income, budget, categories, expenseHistory, handleAddExpense }) => {
+const Home = ({ budgetData, expenseHistory, handleAddExpense }) => {
   useUserAuth();
   const navigate = useNavigate();
-  const [dashboardData, setDashboardData] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const fetchDashboardData = async () => {
-    
-  };
+  console.log("dashborad rendering"); 
+  console.log("Home budgetData:", budgetData);
+  console.log("Home expenseHistory:", expenseHistory);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  console.log("dashborad rendering");
+ 
+  const { income = 0, totalBudget: budget = 0, categories = {} } = budgetData || {};
 
   return (
     <DashboardLayout activeMenu="Dashboard">
@@ -33,8 +22,8 @@ const Home = ({ income, budget, categories, expenseHistory, handleAddExpense }) 
           income={income}
           budget={budget}
           categories={categories}
-          expenseHistory={expenseHistory}
-          dashboardData={dashboardData} // Pass fetched data if needed
+          expenseHistory={expenseHistory || []}
+          handleAddExpense={handleAddExpense}
         />
       </div>
     </DashboardLayout>
@@ -42,3 +31,4 @@ const Home = ({ income, budget, categories, expenseHistory, handleAddExpense }) 
 };
 
 export default Home;
+

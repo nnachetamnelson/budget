@@ -43,3 +43,4 @@ const Dashboard = ({ income, budget, categories, expenseHistory, dashboardData }
 };
 
 export default Dashboard;
+

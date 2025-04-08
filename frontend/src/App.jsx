@@ -6,6 +6,7 @@ import Home from "./pages/Dashboard/Home";
 import CategoryReport from "./pages/Dashboard/CategoryReport";
 import AddExpense from "./pages/Dashboard/AddExpense";
 import SetupBudget from "./pages/Dashboard/SetupBudget";
+import Stats from "./pages/Dashboard/Stats";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
 import UserProvider, { UserContext } from "./context/UserContext";
@@ -13,7 +14,6 @@ import { Toaster } from "react-hot-toast";
 import axiosInstance from "./utils/axiosInstance";
 import { API_PATHS } from "./utils/apiPaths";
 
-// Error Boundary Component
 class ErrorBoundary extends React.Component {
   state = { hasError: false, error: null };
   static getDerivedStateFromError(error) {
@@ -43,6 +43,7 @@ const App = () => {
             <Route key="addexpense" path="/addexpense" element={<ProtectedRoute component={AddExpense} />} />
             <Route key="reports" path="/reports" element={<ProtectedRoute component={CategoryReport} />} />
             <Route key="setupbudget" path="/setupbudget" element={<ProtectedRoute component={SetupBudget} />} />
+            <Route key="stats" path="/stats" element={<ProtectedRoute component={Stats} />} />
             <Route key="income" path="/income" element={<ProtectedRoute component={Income} />} />
             <Route key="expense" path="/expense" element={<ProtectedRoute component={Expense} />} />
           </Routes>
@@ -53,14 +54,13 @@ const App = () => {
   );
 };
 
-
 const Root = () => {
   const { token } = useContext(UserContext);
   return token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />;
 };
 
 const ProtectedRoute = ({ component: Component }) => {
-  const { token } = useContext(UserContext);
+  const { token, clearUser } = useContext(UserContext);
   const [budgetData, setBudgetData] = useState(null);
   const [expenseHistory, setExpenseHistory] = useState([]);
   const location = useLocation();
@@ -122,6 +122,8 @@ const ProtectedRoute = ({ component: Component }) => {
     return <Navigate to="/login" />;
   }
 
+  console.log("Budget data before render:", budgetData);
+  console.log("Expense history before render:", expenseHistory);
   console.log(`Rendering Component: ${Component.name} for path: ${location.pathname}`);
   return (
     <Component
