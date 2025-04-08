@@ -5,7 +5,7 @@ import Tesseract from "tesseract.js";
 const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpense, handleDeleteExpense, categories }) => {
   console.log("AddExpenseOverView rendering");
   console.log("Categories:", categories);
-  console.log("ExpenseHistory sample:", expenseHistory[0]); // Add this
+  console.log("ExpenseHistory sample:", expenseHistory[0]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -36,6 +36,7 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpens
 
     try {
       if (editMode) {
+        console.log("Submitting edit for:", editExpenseId, expenseData); // Debug
         await handleEditExpense(editExpenseId, expenseData);
         toast.success("Expense updated successfully!");
       } else {
@@ -44,8 +45,6 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpens
       }
       resetForm();
       setIsModalOpen(false);
-      setEditMode(false);
-      setEditExpenseId(null);
     } catch (error) {
       toast.error(`Failed to ${editMode ? "update" : "add"} expense.`);
     }
@@ -62,6 +61,7 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpens
   };
 
   const handleEditClick = (expense) => {
+    console.log("Edit clicked:", expense._id); // Debug
     setEditMode(true);
     setEditExpenseId(expense._id);
     setAmount(expense.amount.toString());
@@ -73,6 +73,7 @@ const AddExpenseOverView = ({ expenseHistory, handleAddExpense, handleEditExpens
   };
 
   const handleDeleteClick = async (id) => {
+    console.log("Delete clicked:", id); // Debug
     if (window.confirm("Are you sure you want to delete this expense?")) {
       try {
         await handleDeleteExpense(id);
